@@ -6,16 +6,22 @@ class AddItem extends Component {
         details: ''
     }
 
+    handleAddingItem = (event) => {
+        event.preventDefault();
+
+        console.log('New to do item', this.state);
+    }
+
     render(){
         return (
 
-                <form>
+                <form onSubmit = {this.handleAddingItem}>
                     <div className="row">
                         <div className="input-field col s8 offset-s2">
                             <input
                                 type="text"
                                 value={this.state.title}
-                                onChange={(e) => {this.setState({title: e.target}) }}
+                                onChange={(e) => {this.setState({title: e.target.value}) }}
                             />
                             <label>Title</label>
                         </div>
@@ -25,8 +31,14 @@ class AddItem extends Component {
                             <input
                                 type="text"
                                 value={this.state.details}
-                            />
+                                onChange = {(e) => this.setState({details: e.target.value})}
+                        />
                             <label>Details</label>
+                        </div>
+                        <div className="row right-align">
+                            <button className="btn darken-2">
+                                Add ITEM
+                            </button>
                         </div>
                     </div>
 
