@@ -12,13 +12,20 @@ class AddItem extends Component {
                 <form>
                     <div className="row">
                         <div className="input-field col s8 offset-s2">
-                            <input type="text"/>
+                            <input
+                                type="text"
+                                value={this.state.title}
+                                onChange={(e) => {this.setState({title: e.target}) }}
+                            />
                             <label>Title</label>
                         </div>
                     </div>
                     <div className="row">
                         <div className="input-field col s8 offset-s2">
-                            <input type="text"/>
+                            <input
+                                type="text"
+                                value={this.state.details}
+                            />
                             <label>Details</label>
                         </div>
                     </div>
