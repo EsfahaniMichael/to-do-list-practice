@@ -1,13 +1,61 @@
 import 'materialize-css/dist/css/materialize.min.css';
-import React from 'react';
+import 'materialize-css/dist/js/materialize';
+import React, { Component } from 'react';
 import List from './list';
+import AddItem from './add_item'
+import listData from "../dummy_data/list";
+import { randomString } from '../helpers'
 
 
-const App = () => (
-    <div className="container">
-        <h1 className="center">To Do List</h1>
-        <List/>
-    </div>
-);
+console.log('random string: ', randomString(20));
+class App extends Component {
+    constructor(props){
+        super(props);
+
+        this.state = {
+            list: []
+        }
+
+    }
+
+    deleteItem = (index) => {
+        const listCopy = this.state.list.slice();
+
+        listCopy.splice(index, 1);
+
+        this.setState({
+            list: listCopy
+        });
+    }
+
+    addItem = (item) => {
+        item._id = randomString(8);
+        this.setState({
+            list: [item,...this.state.list]
+        })
+    }
+
+    componentDidMount(){
+        this.getListData();
+    }
+
+    getListData(){
+        //call server to get data
+        this.setState({
+            list:listData
+        });
+    }
+
+    render() {
+        return(
+            <div className="container">
+                <h1 className="center">To Do List</h1>
+
+                <AddItem add={this.addItem}/>
+                <List delete = {this.deleteItem} data ={this.state.list}/>
+            </div>
+         );
+    }
+}
 
 export default App;
