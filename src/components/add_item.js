@@ -9,7 +9,12 @@ class AddItem extends Component {
     handleAddingItem = (event) => {
         event.preventDefault();
 
-        console.log('New to do item', this.state);
+        this.props.add(this.state);
+
+        this.setState({
+            title: '',
+            details: ''
+        });
     }
 
     render(){
