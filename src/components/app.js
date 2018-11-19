@@ -2,10 +2,13 @@ import 'materialize-css/dist/css/materialize.min.css';
 import 'materialize-css/dist/js/materialize';
 import React, { Component } from 'react';
 import List from './list';
+import axios from 'axios';
 import AddItem from './add_item'
-import listData from "../dummy_data/list";
+
 import { randomString } from '../helpers'
 
+const BASE_URL = "http://api.reactprototypes.com/todos";
+const API_KEY = '?key=c918_michael';
 
 console.log('random string: ', randomString(20));
 class App extends Component {
@@ -13,26 +16,23 @@ class App extends Component {
         super(props);
 
         this.state = {
-            list: []
+            list: [],
+            error: ''
         }
 
     }
 
-    deleteItem = (index) => {
-        const listCopy = this.state.list.slice();
+    deleteItem = async (id) => {
+        console.log('Delete item with ID', id);
+        const resp = await axios.delete(`${BASE_URL}/${id + API_KEY}`)
 
-        listCopy.splice(index, 1);
-
-        this.setState({
-            list: listCopy
-        });
+        this.getListData();
     }
 
-    addItem = (item) => {
-        item._id = randomString(8);
-        this.setState({
-            list: [item,...this.state.list]
-        })
+    addItem = async (item) => {
+        const resp = await axios.post(BASE_URL + API_KEY, item);
+
+        this.getListData();
     }
 
     componentDidMount(){
@@ -40,19 +40,39 @@ class App extends Component {
     }
 
     getListData(){
-        //call server to get data
-        this.setState({
-            list:listData
+        axios.get(BASE_URL + API_KEY).then((resp) => {
+            console.log(resp);
+
+            this.setState({
+                list: resp.data.todos
+            });
+        }).catch((err) => {
+           console.log('request error:', err.message);
+           this.setState({
+               error: 'Error getting todos'
+           });
         });
+
     }
 
     render() {
+        const {error } = this.state;
+
+        console.log('HERE IT IS', this.state.list)
         return(
             <div className="container">
                 <h1 className="center">To Do List</h1>
 
                 <AddItem add={this.addItem}/>
-                <List delete = {this.deleteItem} data ={this.state.list}/>
+                {
+                    error
+                        ?
+                        <h1 className="center red-text">{error}</h1>
+                        :
+                        <List delete = {this.deleteItem} data ={this.state.list}/>
+                }
+
+
             </div>
          );
     }
