@@ -11,7 +11,7 @@ class List extends Component {
             return (
                 <li className="collection-item" key={item._id}>
                     {item.title}
-                    <button onClick={this.props.delete(index)} className="btn red darken-2">Delete</button>
+                    <button onClick={() => this.props.delete(item._id)} className="btn red darken-2">Delete</button>
                     </li>
             )
         });
